@@ -1,6 +1,5 @@
-import os
-from excel_parser.parse import ExcelExtractor
 
+from excel_parser.parse import ExcelExtractor
 
 e =ExcelExtractor(__file__)
 e.getFileList()

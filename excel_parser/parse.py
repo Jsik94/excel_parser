@@ -1,9 +1,7 @@
 import csv
 import re
 
-import pandas as pd
 import xlrd
-from openpyxl import load_workbook
 import os
 
 
@@ -12,12 +10,12 @@ class ExcelExtractor:
     def __init__(self,dir):
         self.origin= dir
         self.dir_ = os.path.dirname(os.path.realpath(dir)) + '{}dataset{}'.format(os.path.sep, os.path.sep)
-        print('loc', self.dir_)
+        print('Current Dir loc : ', self.dir_)
 
 
     def getFileList(self):
         self.file_list = os.listdir(self.dir_)
-        print('getFileList:',self.file_list)
+        print('Find Filess :',len(self.file_list))
 
 
 
@@ -27,8 +25,6 @@ class ExcelExtractor:
         self.data_list =[]
         self.data_colum=["회사명","url","담당자 번호","주소","연봉","인센","근무지","담당 업무","요건"]
         for list_ in self.file_list:
-            print('Extract target file :', list_)
-            # res =pd.read_excel(path+os.path.sep+list_)
             wb = xlrd.open_workbook(self.dir_+list_)
             sheet = wb.sheet_by_index(0)
             sten = str(sheet.cell(14,2).value);
@@ -59,16 +55,12 @@ class ExcelExtractor:
 
     def saveCSV(self):
         dist_path = os.path.dirname(os.path.realpath(self.origin))+"{}data_dist{}".format(os.path.sep,os.path.sep)
-        # print(self.data_list)
-        print(dist_path+"result.csv")
-        print(self.origin)
-        print(self.data_list)
+        print("Save Dir :",dist_path+"result.csv")
         with open(dist_path+"result.csv".format(os.path.sep),'w',encoding='utf8',newline='') as f:
             dw = csv.DictWriter(f,fieldnames=self.data_colum)
             dw.writeheader()
             for list_ in self.data_list:
-                print(list_)
                 dw.writerow(list_)
 
 
-        print('완료되었습니다')
+        print('Complete')
